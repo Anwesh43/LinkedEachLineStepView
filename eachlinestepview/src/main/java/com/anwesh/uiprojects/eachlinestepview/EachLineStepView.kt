@@ -30,7 +30,7 @@ fun Canvas.drawELSNode(i : Int, scale : Float, paint : Paint) {
         save()
         translate((xGap * i) * sf, 0f)
         drawLine(0f, 0f, xGap * sc * sf, 0f, paint)
-        drawLine(xGap * sf, 0f, 0f, yGap, paint)
+        drawLine(xGap * sf, 0f, xGap * sf, yGap * sc, paint)
         restore()
     }
     restore()
@@ -40,6 +40,12 @@ class EachLineStepView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val renderer : Renderer = Renderer(this)
+
+    var eachLineAnimationListener : EachLineAnimationListener? = null
+
+    fun addEachLineAnimationListener(onComplete : (Int) -> Unit, onReset : (Int) -> Unit) {
+        eachLineAnimationListener = EachLineAnimationListener(onComplete, onReset)
+    }
 
     override fun onDraw(canvas : Canvas) {
         renderer.render(canvas, paint)
@@ -160,6 +166,7 @@ class EachLineStepView(ctx : Context) : View(ctx) {
                 curr = curr.getNext(dir) {
                     dir *= -1
                 }
+                cb(i, scl)
             }
         }
 
@@ -179,6 +186,11 @@ class EachLineStepView(ctx : Context) : View(ctx) {
             animator.animate {
                 eachLineStep.update {i, scl ->
                     animator.stop()
+                    when (scl) {
+                        1f -> view.eachLineAnimationListener?.onComplete?.invoke(i)
+                        0f -> view.eachLineAnimationListener?.onReset?.invoke(i)
+                    }
+
                 }
             }
         }
@@ -197,4 +209,6 @@ class EachLineStepView(ctx : Context) : View(ctx) {
             return view
         }
     }
+
+    data class EachLineAnimationListener(var onComplete : (Int) -> Unit, var onReset : (Int) -> Unit)
 }
