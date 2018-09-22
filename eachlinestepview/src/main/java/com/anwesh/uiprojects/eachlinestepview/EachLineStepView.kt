@@ -14,6 +14,27 @@ import android.app.Activity
 
 val nodes : Int = 5
 
+fun Canvas.drawELSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val xGap : Float = w / ((nodes + 1) * 2)
+    val yGap : Float = h / (nodes + 1)
+    paint.strokeWidth = Math.min(w, h) / 60
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.color = Color.BLUE
+    save()
+    translate(w/2, yGap * i + yGap)
+    for (j in 0..1) {
+        val sc : Float = Math.min(0.5f, Math.max(0f, scale - j * 0.5f)) * 2
+        val sf : Float = 1f - 2 * j
+        save()
+        translate((xGap * i) * sf, 0f)
+        drawLine(0f, 0f, xGap * sc, 0f, paint)
+        restore()
+    }
+    restore()
+}
+
 class EachLineStepView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
