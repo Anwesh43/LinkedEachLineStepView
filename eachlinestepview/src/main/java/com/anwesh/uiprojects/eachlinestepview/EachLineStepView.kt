@@ -161,4 +161,26 @@ class EachLineStepView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : EachLineStepView) {
+
+        private val animator : Animator = Animator(view)
+        private val eachLineStep : EachLineStep = EachLineStep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            eachLineStep.draw(canvas, paint)
+            animator.animate {
+                eachLineStep.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            eachLineStep.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
