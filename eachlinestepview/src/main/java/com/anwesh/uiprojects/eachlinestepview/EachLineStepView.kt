@@ -30,6 +30,7 @@ fun Canvas.drawELSNode(i : Int, scale : Float, paint : Paint) {
         save()
         translate((xGap * i) * sf, 0f)
         drawLine(0f, 0f, xGap * sc * sf, 0f, paint)
+        drawLine(xGap * sf, 0f, 0f, yGap, paint)
         restore()
     }
     restore()
