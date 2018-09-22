@@ -26,11 +26,13 @@ fun Canvas.drawELSNode(i : Int, scale : Float, paint : Paint) {
     translate(w/2, yGap * i + yGap)
     for (j in 0..1) {
         val sc : Float = Math.min(0.5f, Math.max(0f, scale - j * 0.5f)) * 2
+        val sc1 : Float = Math.min(0.5f, sc) * 2
+        val sc2 : Float = Math.min(0.5f, Math.max(0f, sc - 0.5f)) * 2
         val sf : Float = 1f - 2 * j
         save()
         translate((xGap * i) * sf, 0f)
-        drawLine(0f, 0f, xGap * sc * sf, 0f, paint)
-        drawLine(xGap * sf, 0f, xGap * sf, yGap * sc, paint)
+        drawLine(0f, 0f, xGap * sc1 * sf, 0f, paint)
+        drawLine(xGap * sf, 0f, xGap * sf, yGap * sc2, paint)
         restore()
     }
     restore()
@@ -63,7 +65,7 @@ class EachLineStepView(ctx : Context) : View(ctx) {
     data class State(var scale : Float = 0f, var prevScale : Float = 0f, var dir : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
-            scale += 0.1f * dir
+            scale += 0.025f * dir
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
                 dir = 0f
