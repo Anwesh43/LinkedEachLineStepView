@@ -184,4 +184,12 @@ class EachLineStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity : Activity) : EachLineStepView {
+            val view : EachLineStepView = EachLineStepView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
