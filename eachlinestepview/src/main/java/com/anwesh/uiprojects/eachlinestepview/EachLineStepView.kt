@@ -29,7 +29,7 @@ fun Canvas.drawELSNode(i : Int, scale : Float, paint : Paint) {
         val sf : Float = 1f - 2 * j
         save()
         translate((xGap * i) * sf, 0f)
-        drawLine(0f, 0f, xGap * sc, 0f, paint)
+        drawLine(0f, 0f, xGap * sc * sf, 0f, paint)
         restore()
     }
     restore()
@@ -105,6 +105,10 @@ class EachLineStepView(ctx : Context) : View(ctx) {
 
         private var prev : ELSNode? = null
         private var next : ELSNode? = null
+
+        init {
+            addNeighbor()
+        }
 
         fun addNeighbor() {
             if (i < nodes - 1) {
